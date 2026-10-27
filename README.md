@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CAF — Central Asia Foundation
 
-## Getting Started
+Многоязычный адаптивный сайт Среднеазиатского фонда социально-правовой поддержки мигрантов.
 
-First, run the development server:
+## Запуск
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Для production-проверки:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm lint
+pnpm build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Страницы и функции
 
-## Learn More
+- Отдельные страницы: главная (`/`), о фонде (`/about`), полезная информация (`/information`), получить помощь (`/get-help`), как помочь (`/support`) и контакты (`/contacts`).
+- Общая навигация между страницами; выбранный язык сохраняется при переходах.
+- Переключение русского, узбекского, таджикского, кыргызского и английского языков.
+- Адаптивная мобильная навигация, крупные зоны нажатия и переключатель увеличенного текста.
+- Форма обращения с обязательным подтверждением ознакомления.
 
-To learn more about Next.js, take a look at the following resources:
+## Перед запуском
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Сейчас сайт является интерфейсным прототипом: форма не отправляет и не сохраняет данные. Не вводите паспортные данные и не прикладывайте документы. Для обработки обращений нужно подключить защищённый серверный сервис, ограничить доступ к загружаемым файлам и подготовить политику конфиденциальности для страны работы фонда.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Также перед публикацией необходимо указать проверенные контакты фонда и экстренной связи, целевую страну и юридически согласованный контент. Управление контентом через CMS и загрузка документов не подключены.
