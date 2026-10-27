@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState, useSyncExternalStore } from "react";
+import { testNews } from "../testnews";
 
 const languages = ["ru", "uz", "tg", "ky", "en"] as const;
 type Language = (typeof languages)[number];
@@ -22,6 +23,8 @@ const content: Record<
     heroNote: string;
     helpTitle: string;
     helpIntro: string;
+    newsTitle: string;
+    newsDemoLabel: string;
     services: [string, string][];
     allHelp: string;
     processTitle: string;
@@ -74,6 +77,8 @@ const content: Record<
     helpTitle: "С чем мы помогаем",
     helpIntro:
       "Практическая информация и поддержка — без сложных слов и осуждения.",
+    newsTitle: "Новости фонда",
+    newsDemoLabel: "Демо",
     services: [
       ["Правовая поддержка", "Разобраться в трудовых правах и подготовиться к консультации."],
       ["Работа и зарплата", "Что делать при невыплате зарплаты или споре с работодателем."],
@@ -149,6 +154,8 @@ const content: Record<
     helpTitle: "Qanday yordam beramiz",
     helpIntro:
       "Amaliy ma’lumot va yordam — sodda tilda, hurmat bilan.",
+    newsTitle: "Jamg‘arma yangiliklari",
+    newsDemoLabel: "Namuna",
     services: [
       ["Huquqiy yordam", "Mehnat huquqlarini tushunish va maslahatga tayyorlanish."],
       ["Ish va maosh", "Maosh berilmaganda yoki ish beruvchi bilan nizo bo‘lganda nima qilish kerak."],
@@ -224,6 +231,8 @@ const content: Record<
     helpTitle: "Мо дар чӣ кумак мекунем",
     helpIntro:
       "Маълумот ва дастгирии амалӣ — бо забони сода ва эҳтиром.",
+    newsTitle: "Хабарҳои фонд",
+    newsDemoLabel: "Намуна",
     services: [
       ["Дастгирии ҳуқуқӣ", "Фаҳмидани ҳуқуқи меҳнатӣ ва омодагӣ ба машварат."],
       ["Кор ва маош", "Ҳангоми напардохтани маош ё баҳс бо корфармо чӣ бояд кард."],
@@ -299,6 +308,8 @@ const content: Record<
     helpTitle: "Кандай жардам беребиз",
     helpIntro:
       "Практикалык маалымат жана колдоо — жөнөкөй тилде, урмат менен.",
+    newsTitle: "Фонддун жаңылыктары",
+    newsDemoLabel: "Үлгү",
     services: [
       ["Укуктук колдоо", "Эмгек укуктарын түшүнүү жана кеңешке даярдануу."],
       ["Жумуш жана айлык", "Айлык төлөнбөсө же жумуш берүүчү менен талаш чыкса эмне кылуу керек."],
@@ -374,6 +385,8 @@ const content: Record<
     helpTitle: "How we can help",
     helpIntro:
       "Practical information and support — in plain language, without judgement.",
+    newsTitle: "Foundation news",
+    newsDemoLabel: "Demo",
     services: [
       ["Legal support", "Understand workplace rights and prepare for a consultation."],
       ["Work and pay", "What to do if wages are withheld or a workplace dispute arises."],
@@ -469,7 +482,6 @@ export default function SitePage({ page }: { page: SitePageKey }) {
   );
   const [largeText, setLargeText] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [formMessage, setFormMessage] = useState("");
   const copy = content[language];
   const pageIndex: Record<SitePageKey, number> = {
     home: 0,
@@ -512,7 +524,7 @@ export default function SitePage({ page }: { page: SitePageKey }) {
   }, [menuOpen]);
 
   return (
-    <main lang={language} className={largeText ? "site site--large-text" : "site"}>
+    <div className={largeText ? "site site--large-text" : "site"}>
       <div className="utility-bar">
         <div className="container utility-inner">
           <span>{copy.trust}</span>
@@ -537,6 +549,8 @@ export default function SitePage({ page }: { page: SitePageKey }) {
                 alt=""
                 width={40}
                 height={30}
+                loading="eager"
+                unoptimized
               />
             </span>
             <span className="brand-name">CAF</span>
@@ -568,7 +582,7 @@ export default function SitePage({ page }: { page: SitePageKey }) {
               </Link>
             ))}
             <div className="mobile-header-actions">
-              <Link className="button button--urgent" href="/get-help" onClick={() => setMenuOpen(false)}>
+              <Link className="button button--urgent" href="/get-help#request-form" onClick={() => setMenuOpen(false)}>
                 {copy.emergency}
               </Link>
             </div>
@@ -588,7 +602,7 @@ export default function SitePage({ page }: { page: SitePageKey }) {
                 ))}
               </select>
             </label>
-            <Link className="button button--urgent" href="/get-help">{copy.emergency}</Link>
+            <Link className="button button--urgent" href="/get-help#request-form">{copy.emergency}</Link>
           </div>
         </div>
       </header>
@@ -602,7 +616,8 @@ export default function SitePage({ page }: { page: SitePageKey }) {
         />
       )}
 
-      {page !== "home" && <PageIntro eyebrow={copy.eyebrow} title={pageTitle} description={pageDescription(page, copy)} />}
+      <main id="main-content" lang={language}>
+        {page !== "home" && <PageIntro eyebrow={copy.eyebrow} title={pageTitle} description={pageDescription(page, copy)} />}
 
       {page === "home" && <section className="hero">
         <div className="container hero-grid">
@@ -651,7 +666,7 @@ export default function SitePage({ page }: { page: SitePageKey }) {
                 <span className="service-number">{serviceNumbers[index]}</span>
                 <h3>{title}</h3>
                 <p>{description}</p>
-                <Link className="card-link" href="/get-help" aria-label={`${title} — ${copy.primary}`}>
+                <Link className="card-link" href="/get-help#request-form" aria-label={`${title} — ${copy.primary}`}>
                   <span aria-hidden="true">↗</span>
                 </Link>
               </article>
@@ -660,6 +675,67 @@ export default function SitePage({ page }: { page: SitePageKey }) {
           {page === "home" && <Link className="text-link help-link" href="/information">{copy.allHelp}<span aria-hidden="true"> →</span></Link>}
         </div>
       </section>}
+
+      {page === "home" && <>
+        <section className="news-section section-pad">
+          <div className="container">
+            <div className="section-heading">
+              <h2>{copy.newsTitle}</h2>
+            </div>
+            <div className="news-grid">
+              {testNews.map((item) => (
+                <article className="news-card" key={item.id}>
+                  <div className="news-card-meta">
+                    <span className="news-demo-label">{copy.newsDemoLabel}</span>
+                    <time dateTime={item.publishedAt}>
+                      {item.date[language]}
+                    </time>
+                  </div>
+                  <p className="news-category">{item.category[language]}</p>
+                  <h3>{item.title[language]}</h3>
+                  <p className="news-excerpt">{item.excerpt[language]}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="about-section section-pad">
+          <div className="container about-layout">
+            <div className="about-stamp" aria-hidden="true">
+              <Image
+                className="about-logo"
+                src="/logotype/CAF-logotype.svg"
+                alt=""
+                width={1448}
+                height={1086}
+                unoptimized
+              />
+            </div>
+            <div className="about-copy">
+              <p className="eyebrow"><span className="eyebrow-line" />{copy.aboutLabel}</p>
+              <h2>{copy.aboutTitle}</h2>
+              <p>{copy.aboutText}</p>
+              <Link className="text-link" href="/about">
+                {copy.secondary}<span aria-hidden="true"> →</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="help-guidance home-contact-section section-pad">
+          <div className="container guidance-layout">
+            <div>
+              <p className="eyebrow"><span className="eyebrow-line" />{copy.contactLabel}</p>
+              <h2>{copy.contactTitle}</h2>
+              <p>{copy.contactNote}</p>
+            </div>
+            <Link className="button button--primary" href="/contacts">
+              {copy.contactLabel}<span aria-hidden="true">↗</span>
+            </Link>
+          </div>
+        </section>
+      </>}
 
       {page === "get-help" && <section className="process-section section-pad">
         <div className="container">
@@ -690,11 +766,28 @@ export default function SitePage({ page }: { page: SitePageKey }) {
         </div>
       </section>}
 
+      {page === "get-help" && <section className="contact-section section-pad">
+        <div className="container contact-layout">
+          <div className="contact-copy">
+            <p className="eyebrow eyebrow--light"><span className="eyebrow-line" />{copy.contactLabel}</p>
+            <h2>{copy.contactTitle}</h2>
+            <p className="contact-intro">{copy.contactText}</p>
+          </div>
+          <ContactRequestForm copy={copy} />
+        </div>
+      </section>}
+
       {page === "about" && <section className="about-section section-pad">
         <div className="container about-layout">
           <div className="about-stamp" aria-hidden="true">
-            <span className="stamp-letter">S</span>
-            <span className="stamp-caption">PEOPLE<br />FIRST</span>
+            <Image
+              className="about-logo"
+              src="/logotype/CAF-logotype.svg"
+              alt=""
+              width={1448}
+              height={1086}
+              unoptimized
+            />
           </div>
           <div className="about-copy">
             <p className="eyebrow"><span className="eyebrow-line" />{copy.aboutLabel}</p>
@@ -753,39 +846,10 @@ export default function SitePage({ page }: { page: SitePageKey }) {
             <p className="contact-intro">{copy.contactText}</p>
             <p className="contact-note">{copy.contactNote}</p>
           </div>
-          <form
-            className="contact-form"
-            onSubmit={(event) => {
-              event.preventDefault();
-              setFormMessage(copy.formResult);
-            }}
-          >
-            <h3>{copy.formTitle}</h3>
-            <p className="form-description">{copy.formText}</p>
-            <div className="form-fields-grid">
-              <label>
-                <span>{copy.nameField}</span>
-                <input type="text" name="name" autoComplete="name" required />
-              </label>
-              <label>
-                <span>{copy.contactField}</span>
-                <input type="text" name="contact" autoComplete="tel" required />
-              </label>
-            </div>
-            <label>
-              <span>{copy.messageField}</span>
-              <textarea name="message" rows={5} required />
-            </label>
-            <label className="consent-label">
-              <input type="checkbox" name="consent" required />
-              <span>{copy.consent}</span>
-            </label>
-            <p className="form-warning">{copy.formWarning}</p>
-            <button className="button button--primary form-submit" type="submit">{copy.submit}<span aria-hidden="true">↗</span></button>
-            {formMessage && <p className="form-result" role="status">{formMessage}</p>}
-          </form>
+          <ContactRequestForm copy={copy} />
         </div>
       </section>}
+      </main>
 
       <footer className="site-footer">
         <div className="container footer-inner">
@@ -797,6 +861,8 @@ export default function SitePage({ page }: { page: SitePageKey }) {
                 alt=""
                 width={40}
                 height={30}
+                loading="eager"
+                unoptimized
               />
             </span>
             <span className="brand-name">CAF</span>
@@ -806,7 +872,52 @@ export default function SitePage({ page }: { page: SitePageKey }) {
           <span className="copyright">© CAF</span>
         </div>
       </footer>
-    </main>
+    </div>
+  );
+}
+
+function ContactRequestForm({
+  copy,
+}: {
+  copy: (typeof content)[Language];
+}) {
+  const [formMessage, setFormMessage] = useState("");
+
+  return (
+    <form
+      id="request-form"
+      className="contact-form"
+      onSubmit={(event) => {
+        event.preventDefault();
+        setFormMessage(copy.formResult);
+      }}
+    >
+      <h3>{copy.formTitle}</h3>
+      <p className="form-description">{copy.formText}</p>
+      <div className="form-fields-grid">
+        <label>
+          <span>{copy.nameField}</span>
+          <input type="text" name="name" autoComplete="name" required />
+        </label>
+        <label>
+          <span>{copy.contactField}</span>
+          <input type="text" name="contact" autoComplete="tel" required />
+        </label>
+      </div>
+      <label>
+        <span>{copy.messageField}</span>
+        <textarea name="message" rows={5} required />
+      </label>
+      <label className="consent-label">
+        <input type="checkbox" name="consent" required />
+        <span>{copy.consent}</span>
+      </label>
+      <p className="form-warning">{copy.formWarning}</p>
+      <button className="button button--primary form-submit" type="submit">
+        {copy.submit}<span aria-hidden="true">↗</span>
+      </button>
+      {formMessage && <p className="form-result" role="status">{formMessage}</p>}
+    </form>
   );
 }
 
